@@ -1,0 +1,360 @@
+<html>
+  <head>
+    {% load static %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="Lakshay Arora">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link href= "{% static "css/bootstrap.min.css" %}"rel="stylesheet">
+    <!-- Font awesome CSS -->
+    <link href= "{% static "css/font-awesome.min.css" %}"rel="stylesheet">			
+    <!-- Custom CSS -->
+    
+    <link href="{% static "css/main.css" %}" rel="stylesheet" />
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Result Type', 'Count'],
+          ['Domain_vulnerable',  {{truer}}],
+          ['Domain_secure',      {{falser}}]
+          
+        ]);
+
+        var options = {
+          title: 'Outputs till now',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+
+  </head>
+  <body>
+   <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+
+
+    <div class="s01">
+
+     
+
+    
+      <form enctype="multipart/form-data" method="POST" action="">
+{% csrf_token %}
+  <table class="table table-bordered table-hover table-dark">
+  
+   <caption><h2> Input Data Here</h2></caption>
+   {{ form.as_table }}
+  
+  </table>
+    <input type="submit" value="Upload"/><h3> <----Click here</h3>
+      </form>
+         
+    </div>
+
+<!--
+<div class="container-fluid">
+<br>Dkim records : {{ dkim_records}}<br><br>
+</div>
+-->
+
+{% if name is not None %}
+<div class="khanejo">
+{% if warn_ldmarc == 1 %}
+<div class = "container">
+<h2> Warnings </h2>
+<div class="panel panel-danger">
+<div class="panel-heading"> The site is not secure against impersonation attack ; either:</div>
+{% if warn_spf == 1 %}
+<div class="panel-heading">Dkim record has p=none, having a strong policy is most reccomended</div>
+{% endif %}
+{% if warn_dmarc == 1 %}
+<div class="panel-heading">Dmarc record has p=none, having a strong policy is most reccomended</div>
+{% endif %}
+{% if warn_dkim == 1 %}
+<div class="panel-heading">Dkim implimentation is a pain, but provides additional protection</div>
+{% endif %}
+</div></div>
+
+{% else %}
+<div class = "container">
+<h2> Results </h2>
+<div class="panel panel-success">
+<div class="panel-heading"> The site is correctly configured to counter impersonation attack :</div>
+<div class="panel-heading">Dkim implimentation correct</div>
+<div class="panel-heading">Dmarc implimentation and configurations is secure</div>
+<div class="panel-heading">SPF implimentation and configuration are correct</div>
+</div></div>
+{% endif %}
+
+{% if length_key <= 2000 %}
+
+<div class="container">
+  
+      <div class="panel panel-danger">
+      <div class="panel-heading">WARNING</div>
+      <div class="panel-body">Key_length is less than 2000 , which means key needs to be updated to proper length </div>
+    </div>
+  </div>
+{% else %}
+
+<div class="container">
+  
+      <div class="panel panel-success">
+      <div class="panel-heading">Key-length of DKIM is correct</div>
+      <div class="panel-body">Key_length is proper </div>
+    </div>
+  </div>
+{% endif %}
+
+
+
+<div class="container-fluid">
+  <h2>DKIM</h2>
+  <div class="panel panel-default">
+    <div class="panel-heading">DKIM Record</div>
+    <div class="panel-body">{{dkim_records}}</div>
+  </div>
+</div>
+
+
+
+<br><br>
+<div class = "container">
+<h2> SPF Records </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+<tr><td>dns lookup :</td><td>{{spf1}}</td></tr>
+<tr><td>Command :</td><td>{{spf11}}</td></tr>
+<tr class="table-info"><td>pass :</td><td>{{spf2}}</td></tr>
+<tr><td>neutral :</td><td>{{spf3}}</td></tr>
+<tr><td>softfail :</td><td>{{spf4}}</td></tr>
+<tr><td>fail :</td><td>{{spf5}}</td></tr>
+<tr><td>include :</td><td>{{spf6}}</td></tr>
+<tr><td>redirect :</td><td>{{spf7}}</td></tr>
+{% if warn_spf == 1 %}
+<tr class="table-danger"><td>SPF record doesn't have '~all', rejecting all suspicious records is a recommended practise</td></tr>
+{% endif %}
+<tbody>
+</table>
+</div>
+
+<br><br>
+<div class = "container">
+<h2> DMARC Records </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+<tr class="table-info"><td>DMARC Entry</td><td>{{dmarc1}}</td></tr>
+<tr><b> ATTRIBUTES/TAGS</b></tr>
+<tr><td>v :</td><td>{{dmarc2}}</td></tr>
+<tr><td>p :</td><td>{{dmarc3}}</td></tr>
+<tr><td>sp :</td><td>{{dmarc4}}</td></tr>
+<tr><td>rua :</td><td>{{dmarc5}}</td></tr>
+<tr><td>adkim :</td><td>{{dmarc6}}</td></tr>
+<tr><td>aspf :</td><td>{{dmarc7}}</td></tr>
+<tr><td>fo :</td><td>{{dmarc8}}</td></tr>
+<tr><td>pct :</td><td>{{dmarc9}}</td></tr>
+<tr><td>rf :</td><td>{{dmarc10}}</td></tr>
+<tr><td>ri :</td><td>{{dmarc11}}</td></tr>
+{% if warn_dmarc == 1 %}
+<tr class="table-danger"><td>Dkim record has p=none, having a strong policy is most reccomended</td></tr>
+{% endif %}
+<tbody>
+</table>
+</div>
+<br><br>
+
+
+<div class = "container">
+<h2> DNS Record Enumeration </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+{% for i in records_enum %}
+<tr><th scope="row"></th><td>{{i }}</td><tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<br><br>
+
+<!--
+{{records_enum}}<br><br>
+-->
+
+<!--
+<table>
+<caption>Extracted URL from the email</caption>
+{% for i in extracted_url %}
+<tr>{{i}}</tr>
+{% endfor %}
+</table>
+-->
+
+<div class="container">
+  <h2>Priliminary checks of domain/IP</h2>
+  <p>This division checks for trustworthiness of IP/domain</p>
+  <div class="panel-group">
+    <div class="panel panel-info">
+      <div class="panel-heading">Extracted URL</div>
+      <div class="panel-body">{{extracted_url}}</div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading">Blacklist_ip_result</div>
+      <div class="panel-body">{{blacklist_domain}}</div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading">Blacklist_ip_result</div>
+      <div class="panel-body">{{blacklist_ip}}</div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading">DNSSEC Present</div>
+      <div class="panel-body">{{dnsec}}</div>
+    </div>
+    <div class="panel panel-info">
+      <div class="panel-heading">DMARC Status</div>
+      <div class="panel-body">{{dmarc_status}}</div>
+    </div>
+  </div>
+</div>
+
+<!--
+Extracted URL: {{extracted_url}}<br><br>
+
+
+Blacklist_domain_result: {{blacklist_domain}}<br><br>
+
+Blacklist_ip_result:  {{blacklist_ip}}<br><br>
+
+DMARC Status: {{dmarc_status}}<br><br>
+
+
+DNSSEC Present: {{dnsec}}<br><br>
+-->
+
+<div class = "container">
+<h2> MX Record </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+{% for i in mx_record%}
+{% for j,k in i.items %}
+<tr><td>{{j}}</td><td>{{k}}</td><tr>
+{% endfor %}
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<!--
+{{mx_record}}<br><br>
+-->
+<br><br>
+<div class = "container">
+<h2> NS Records </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+{% for i,j in ns_record.items %}
+<tr><td>{{i}}</td><td>{{j}}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<!--
+{{ns_record}}<br><br>
+-->
+<br><br>
+<div class = "container">
+<h2> Header in email </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+{% for i,j in meta_header.items %}
+<tr><td>{{i}}</td><td>{{j}}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<!--
+{{meta_header}}<br><br>
+-->
+<!--
+<br><br>
+{{meta_body}}<br><br>
+<br><br>
+-->
+
+
+<div class = "container">
+<h2> Attachments deatails </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+<tbody>
+{% for i in attachment %}
+<table class="table table-striped table-bordered table-hover table-condensed"><caption> Attachments</caption>
+<tbody>
+{% for j,v in i.items %}
+<tr><td>{{ j }}</td><td>{{v}}</td></tr>
+{% endfor %}
+<!--
+<tr class="table-info"><td>Virus Total Result</td><td> {{ Viri_result }}</td></tr>
+-->
+</tbody>
+</table>
+{% endfor %}
+</tbody>
+</table>
+</div>
+<!--
+Attachments: {{attachment}}<br><br>
+-->
+<!--
+<br><br>
+<div class = "container">
+<h2> DMARC Records </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+<tr class="table-info"><td>DMARC Entry</td><td>{{dmarc1}}</td></tr>
+<tr><b> ATTRIBUTES/TAGS</b></tr>
+<tr><td>v :</td><td>{{dmarc2}}</td></tr>
+<tr><td>p :</td><td>{{dmarc3}}</td></tr>
+<tr><td>sp :</td><td>{{dmarc4}}</td></tr>
+<tr><td>rua :</td><td>{{dmarc5}}</td></tr>
+<tr><td>adkim :</td><td>{{dmarc6}}</td></tr>
+<tr><td>aspf :</td><td>{{dmarc7}}</td></tr>
+<tr><td>fo :</td><td>{{dmarc8}}</td></tr>
+<tr><td>pct :</td><td>{{dmarc9}}</td></tr>
+<tr><td>rf :</td><td>{{dmarc10}}</td></tr>
+<tr><td>ri :</td><td>{{dmarc11}}</td></tr>
+<tbody>
+</table>
+</div>
+
+
+<br><br>
+<div class = "container">
+<h2> SPF Records </h2>
+<table class="table table-striped table-bordered table-hover table-condensed">
+<tbody>
+<tr><td>dns lookup :</td><td>{{spf1}}</td></tr>
+<tr class="table-info"><td>pass :</td><td>{{spf2}}</td></tr>
+<tr><td>neutral :</td><td>{{spf3}}</td></tr>
+<tr><td>softfail :</td><td>{{spf4}}</td></tr>
+<tr><td>fail :</td><td>{{spf5}}</td></tr>
+<tr><td>include :</td><td>{{spf6}}</td></tr>
+<tr><td>redirect :</td><td>{{spf7}}</td></tr>
+<tbody>
+</table>
+</div>
+
+-->
+   {% endif %}
+   </div>
+  </body>
+</html>
