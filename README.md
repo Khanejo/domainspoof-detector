@@ -1,6 +1,8 @@
 # domainspoof-detector
 This utility is a django based project that checks implimentation and configuration of protocols like SPF, DKIM, DMARC and DNS to find out if the mailing server is spoofable or not !!
 
+Run it by installing django and requirements.txt and then ``` python3 manage.py runserver --noreload --nothreading ```
+
 ![image1](screenshot/img7.png?raw=true "Results obtained from the tool")
 
 According to our tool,experiment was conducted on the top 10 mailing service providers:
