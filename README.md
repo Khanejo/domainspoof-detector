@@ -13,8 +13,7 @@ had no DMARC implimentation, thus any email could be easily spoofed and sent to 
 
 Some other experiments were conducted against some of the 
 # prestigious educational institutions of India and many of those were found to be spoofable 
-and any spoofed email from their facult members email could be sent to these liberal policy and no DMARC implimentation services.(
-# Huge Concern
+and any spoofed email from their facult members email could be sent to these liberal policy and no DMARC implimentation services.(Huge Concern
 )
 
 # Salient features of my utility:
@@ -27,3 +26,32 @@ and any spoofed email from their facult members email could be sent to these lib
 
 4) Has email parsing features, which parse and segregate email parts for further analysis(have left a dead for integration of virustotal to the scrapped )
 
+![image2](screenshot/img1.png?raw=true "Results obtained from the tool")
+
+Enter:
+
+Suspected Domain , its selector and a normal email file(which we would like to parse{.eml})
+
+![image3](screenshot/img2.png?raw=true "Results obtained from the tool")
+
+Easy to visualize results
+
+![image4](screenshot/img3.png?raw=true "Results obtained from the tool")
+
+Detailed record information parsed
+
+![image5](screenshot/img4.png?raw=true "Results obtained from the tool")
+
+DMARC and DNS information of the domain
+
+![image1](screenshot/img5.png?raw=true "Results obtained from the tool")
+
+Other security related information 
+
+![image1](screenshot/img6.png?raw=true "Results obtained from the tool")
+
+Email parsing modules result
+
+![image8](screenshot/img9.png?raw=true "Results obtained from the tool")
+
+EAsy to visualize results
