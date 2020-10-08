@@ -1,0 +1,6 @@
+mail-parser
+eml-parser
+checkdmarc
+pydnsbl
+pandas
+emaildata
